@@ -6,10 +6,12 @@ Muse Chrome extension (needs Chrome 137+).
 - Image: `lscr.io/linuxserver/chromium:latest` (multi-arch; NAS is amd64.
   `kasmweb/chrome` is amd64-only and cannot run on OCI ARM, but this image
   works on both.)
-- Access: Tailscale only — the container shares the NAS tailscale network
-  namespace (`network_mode: container:tailscale`), so the web UI binds
-  directly to the NAS Tailscale IP: `http://100.66.222.41:3000`.
-  No Docker port mapping (Tailscale does not forward to mapped ports).
+- Access: LAN only — the container runs on the NAS Docker bridge network
+  with port mapping `3000:3000`, so the web UI is at
+  `http://10.10.10.50:3000` (NAS LAN IP). The user only uses this Chrome
+  on the NAS, so no Tailscale or internet-domain access is needed.
+  (Earlier it used `network_mode: container:tailscale` for Tailscale
+  access; switched to bridge on 2026-11-19 per the user.)
 - Profile persists in the named volume `chromium_config` (`/config`).
 - Internet via the OpenWrt proxy (`HTTP_PROXY`/`HTTPS_PROXY`, Stack env
   vars, defaults point at `10.10.10.250:7890`).
