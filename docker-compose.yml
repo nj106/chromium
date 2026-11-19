@@ -2,14 +2,15 @@ services:
   chromium:
     image: lscr.io/linuxserver/chromium:latest
     container_name: chromium
+    network_mode: "container:tailscale"
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Asia/Shanghai}
+      - HTTP_PROXY=${HTTP_PROXY:-http://10.10.10.250:7890}
+      - HTTPS_PROXY=${HTTPS_PROXY:-https://10.10.10.250:7890}
     volumes:
       - chromium_config:/config
-    ports:
-      - "3000:3000"
     shm_size: "1gb"
     security_opt:
       - seccomp:unconfined
