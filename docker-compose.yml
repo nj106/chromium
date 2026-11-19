@@ -1,0 +1,22 @@
+services:
+  chromium:
+    image: lscr.io/linuxserver/chromium:latest
+    container_name: chromium
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Asia/Shanghai}
+    volumes:
+      - chromium_config:/config
+    ports:
+      - "3000:3000"
+    shm_size: "1gb"
+    security_opt:
+      - seccomp:unconfined
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+volumes:
+  chromium_config:
+    name: chromium_config
